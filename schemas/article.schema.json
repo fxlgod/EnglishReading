@@ -1,0 +1,701 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:englishreading:article:v2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": [
+        "fixture",
+        "staging",
+        "approved",
+        "rejected",
+        "withdrawn"
+      ]
+    },
+    "title_en": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title_zh": {
+      "type": "string",
+      "minLength": 1
+    },
+    "level": {
+      "enum": [
+        "A1",
+        "A2",
+        "B1",
+        "B2",
+        "C1",
+        "C2"
+      ]
+    },
+    "primary_topic": {
+      "enum": [
+        "school",
+        "technology",
+        "mystery",
+        "adventure",
+        "history",
+        "daily_life",
+        "psychology_science",
+        "literature"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "source_type": {
+      "enum": [
+        "licensed_original",
+        "licensed_adaptation",
+        "ai_original",
+        "original_serial"
+      ]
+    },
+    "fiction": {
+      "type": "boolean"
+    },
+    "paragraphs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sentences": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "separator_after": {
+                  "enum": [
+                    "",
+                    " "
+                  ]
+                },
+                "translation_zh": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "tokens": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "surface": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "lemma": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "pos": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "gloss_zh": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "ipa": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "start",
+                      "end",
+                      "surface",
+                      "lemma",
+                      "pos",
+                      "gloss_zh"
+                    ]
+                  },
+                  "minItems": 1
+                },
+                "phrases": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "start": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "end": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "surface": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "gloss_zh": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "start",
+                      "end",
+                      "surface",
+                      "gloss_zh"
+                    ]
+                  },
+                  "minItems": 0
+                },
+                "note_zh": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "text",
+                "separator_after",
+                "translation_zh",
+                "tokens",
+                "phrases"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "sentences"
+        ]
+      },
+      "minItems": 1
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "public_domain",
+            "CC0",
+            "CC-BY",
+            "CC-BY-SA",
+            "written_permission",
+            "project_original"
+          ]
+        },
+        "author": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "license_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modifications": {
+          "type": "string",
+          "minLength": 1
+        },
+        "territory_review": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "original_work_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "author",
+        "evidence_ref",
+        "modifications",
+        "territory_review",
+        "review_date",
+        "original_work_id"
+      ]
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "producer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_reviewer_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "enum": [
+            "pending",
+            "pass",
+            "reject"
+          ]
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "producer_scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "engagement",
+            "naturalness",
+            "distinctiveness",
+            "value"
+          ],
+          "properties": {
+            "engagement": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "naturalness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "distinctiveness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "value": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "independent_scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "engagement",
+            "naturalness",
+            "distinctiveness",
+            "value"
+          ],
+          "properties": {
+            "engagement": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "naturalness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "distinctiveness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "value": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "reason"
+              ],
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "producer_id",
+        "level_reason",
+        "result"
+      ]
+    },
+    "series": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chapter": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "chapter"
+      ]
+    },
+    "summary_zh": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "featured": {
+      "type": "boolean"
+    },
+    "admitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "revision",
+    "status",
+    "title_en",
+    "title_zh",
+    "level",
+    "primary_topic",
+    "tags",
+    "source_type",
+    "fiction",
+    "paragraphs",
+    "rights",
+    "review",
+    "summary_zh",
+    "featured"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source_type": {
+            "const": "original_serial"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "series"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "series"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_type": {
+            "enum": [
+              "licensed_original",
+              "licensed_adaptation"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rights": {
+            "required": [
+              "source_url"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "approved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "review": {
+            "required": [
+              "independent_reviewer_id",
+              "evidence_ref",
+              "producer_scores",
+              "independent_scores"
+            ],
+            "properties": {
+              "result": {
+                "const": "pass"
+              },
+              "producer_scores": {
+                "properties": {
+                  "engagement": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "naturalness": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "distinctiveness": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "value": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  }
+                }
+              },
+              "independent_scores": {
+                "properties": {
+                  "engagement": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "naturalness": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "distinctiveness": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  },
+                  "value": {
+                    "properties": {
+                      "score": {
+                        "minimum": 4
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "rights": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "CC0",
+                  "CC-BY",
+                  "CC-BY-SA"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "rights": {
+            "required": [
+              "license_url"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "approved",
+              "fixture"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "admitted_at"
+        ]
+      }
+    }
+  ]
+}

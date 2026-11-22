@@ -1,0 +1,17 @@
+import { useState } from 'react';
+import './style.css';
+
+const levels = [['A1', '从简单开始'], ['A2', '熟悉的日常'], ['B1', '故事渐入佳境'], ['B2', '探索更多想法'], ['C1', '丰富的表达'], ['C2', '细微的语言']];
+const topics = ['校园与青春', '科技与未来', '悬疑与推理', '科幻与冒险', '历史与文化', '日常生活'];
+
+export function App() {
+  const [dark, setDark] = useState(false);
+  return <div className="app" data-theme={dark ? 'dark' : 'light'}>
+    <a className="skip" href="#main">跳到主要内容</a>
+    <header className="header"><a className="brand" href="#top"><span className="brand-mark" aria-hidden="true">e.</span><span>EnglishReading<small>一个阅读的地方</small></span></a><nav aria-label="页面导航"><a href="#explore">探索</a><a href="#reading">阅读预览</a></nav><button className="theme" onClick={() => setDark(!dark)} aria-label={dark ? '切换到浅色模式' : '切换到深色模式'}>{dark ? '☀' : '◐'} <span>{dark ? '浅色' : '深色'}</span></button></header>
+    <main id="main"><section className="hero" id="top"><div className="hero-copy"><p className="kicker">为好奇心，留一点时间</p><h1>阅读不必赶路。<br /><em>故事会等你。</em></h1><p className="intro">从一个感兴趣的故事开始，在英文里发现更大的世界。</p><div className="hero-actions"><a className="primary" href="#explore">探索书架 <span aria-hidden="true">↗</span></a><a className="secondary" href="#reading">看看阅读体验 <span aria-hidden="true">→</span></a></div><p className="note">按自己的节奏阅读，无需考试和打卡。</p></div><div className="feature" aria-label="故事卡片设计示例"><div className="feature-top"><span>书架上的故事</span><span>设计示例</span></div><div className="cover"><div className="cover-orbit" aria-hidden="true"><span></span><span></span><span></span></div><p>THE CITY<br />WITHOUT TIME</p><small>一个关于时间的故事构想</small></div><div className="feature-bottom"><div><span className="tag">连载构想</span><h2>The City Without Time</h2><p>如果城市里的钟都停了，会发生什么？</p></div><span className="feature-arrow" aria-hidden="true">↗</span></div></div></section>
+    <section id="explore" className="section explore"><div className="section-heading"><div><p className="kicker">找到适合你的那一篇</p><h2>从哪里开始？</h2></div><p>选一种语言的难度，或者先跟着兴趣走。<br />以下为设计示例，内容尚未上线。</p></div><div className="explore-grid"><div><div className="subhead"><h3>按难度</h3><span>从 A1 到 C2</span></div><div className="levels">{levels.map(([level, text]) => <div className="level" key={level}><strong>{level}</strong><span>{text}</span></div>)}</div></div><div><div className="subhead"><h3>按兴趣</h3><span>总有新发现</span></div><div className="topics">{topics.map((topic, i) => <div className="topic" key={topic}><span className={'topic-dot dot-' + i} aria-hidden="true" />{topic}</div>)}</div></div></div></section>
+    <section className="section reading" id="reading"><div className="reading-intro"><p className="kicker">阅读体验预览</p><h2>不认识的词，<br />也不会打断故事。</h2><p>留出舒服的空间给文字。需要帮助时，词义和句子翻译就在附近。</p><p className="note">以下仅为静态交互设计示意。</p></div><div className="reading-card"><div className="reading-top"><span>阅读示例</span><span>A1 · 故事</span></div><h3>A Small Morning</h3><p className="reading-text">Mia opens the <span className="underlined">window</span>. A small bird is waiting outside.</p><div className="reading-help"><div><strong>window</strong><span>窗户</span></div><div><strong>句子翻译</strong><span>米娅打开窗户。</span></div></div></div></section>
+    <section className="closing"><div><p className="kicker">一本书，很多个世界</p><h2>下一次打开，会遇见什么？</h2><p>书架正在准备中。故事、想法和新的视角，都值得慢慢读。</p></div><a href="#top">回到顶部 ↑</a></section></main><footer><span>EnglishReading <small>临时项目名称</small></span><span>为阅读而做，慢慢来。</span></footer>
+  </div>;
+}

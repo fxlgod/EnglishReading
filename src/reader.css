@@ -1,0 +1,46 @@
+.reader { max-width: var(--reading-width, 68ch); margin: 28px 0 36px; }
+.reader-body { font: var(--reading-font-size, 20px)/var(--reading-line-height, 1.95) Georgia, 'Times New Roman', serif; overflow-wrap: anywhere; }
+.reader-body p { margin: 1.25em 0; }
+.sentence-text { white-space: pre-wrap; }
+.reader-word { appearance: none; border: 0; background: transparent; padding: 0; color: inherit; font: inherit; cursor: pointer; }
+.reader-word:hover, .reader-word[aria-expanded=true] { color: var(--accent); text-decoration: underline; }
+.reader button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sentence-toggle { margin-inline: .4em; min-width: 36px; min-height: 36px; padding: 0; font: 0.75rem system-ui; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--accent); }
+.sentence-translation:not([hidden]) { display: block; margin: .35em 0; padding: .4em .65em; background: var(--soft); color: var(--ink); font: 0.95rem/1.7 system-ui; }
+.lookup { position: fixed; z-index: 5; left: var(--lookup-left, 12px); top: var(--lookup-top, 12px); width: min(340px, calc(100vw - 24px)); max-height: min(45vh, calc(100vh - 24px)); overflow: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; box-shadow: 0 8px 30px #0003; overflow-wrap: anywhere; }
+.lookup-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.lookup-head h2 { margin: 0; font: 1.25rem Georgia, serif; }
+.lookup button { min-height: 44px; border: 1px solid var(--line); background: var(--soft); border-radius: 6px; color: var(--ink); padding: 0 9px; }
+.lookup-head button { min-width: 44px; font-size: 1.2rem; }
+.lookup-meta { font-size: .8rem; color: var(--muted); margin: 0 0 .25rem; }
+.lookup-gloss { margin: 0 0 .5rem; }
+.lookup-options { display: flex; gap: 6px; flex-wrap: wrap; }
+.lookup-options button[aria-pressed=true] { background: var(--accent); color: var(--bg); }
+@media (max-width: 700px) {
+  .lookup { inset: auto 12px max(12px, env(safe-area-inset-bottom)); width: auto; max-height: 36vh; }
+  .lookup[data-edge=top] { inset: max(12px, env(safe-area-inset-top)) 12px auto; }
+  .sentence-toggle { min-height: 44px; min-width: 44px; }
+  .reader-body { font-size: var(--reading-font-size, 18px); }
+}
+
+
+.speech-controls { padding: 16px; margin-bottom: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font: .9rem/1.6 system-ui; }
+.speech-controls label { display: inline-flex; flex-wrap: wrap; max-width: 100%; gap: 8px; align-items: center; margin: 4px 16px 10px 0; }
+.speech-controls select { max-width: min(100%, 240px); min-height: 44px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); padding: 6px; }
+.speech-buttons, .speech-sentences { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.speech-controls button { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--ink); }
+.speech-controls button:disabled { opacity: .5; }
+.speech-sentences { max-height: 150px; overflow: auto; }
+.speech-sentence-button { font-size: .8rem; }
+.speech-state { display: block; color: var(--muted); }
+.speaking-sentence { background: var(--soft); border-radius: 4px; }
+
+.reader-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.personal-list { padding-left: 1.2rem; }
+.personal-list li { margin: 1rem 0; overflow-wrap: anywhere; }
+
+.reading-settings { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 16px; background: var(--surface); }
+.reading-settings summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; }
+.settings-fields { display: flex; flex-wrap: wrap; gap: 12px; }
+.settings-fields label { display: grid; gap: 5px; }
+.settings-fields select { min-height: 44px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px; }

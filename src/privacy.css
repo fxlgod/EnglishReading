@@ -1,0 +1,6 @@
+.privacy-content { max-width: 780px; margin-inline: auto; overflow-wrap: anywhere; }
+.privacy-content p { line-height: 1.65; }
+.privacy-card { background: var(--surface); border: 1px solid var(--line); padding: clamp(16px, 3vw, 26px); margin: 20px 0; border-radius: 14px; }
+.privacy-file { display: grid; gap: 8px; margin: 16px 0; }
+.privacy-file input { max-width: 100%; }
+.privacy-actions { display: flex; flex-wrap: wrap; gap: 8px; }
