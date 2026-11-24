@@ -3,7 +3,9 @@ import { useOnline } from './offline-client';
 import type { Sentence } from './core/content/types';
 
 type State = 'idle' | 'playing' | 'paused' | 'error';
-export function Speech({ sentences, onCurrent }: { sentences: Sentence[]; onCurrent: (id: string | null) => void }) {
+export type SpeechSentence = Pick<Sentence, 'id' | 'text'>;
+
+export function Speech({ sentences, onCurrent }: { sentences: readonly SpeechSentence[]; onCurrent: (id: string | null) => void }) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voiceId, setVoiceId] = useState('');
   const [remote, setRemote] = useState(false);

@@ -1,0 +1,5 @@
+.novel-rights { max-width: 68ch; margin-block: 20px; color: var(--muted); font-size: .9rem; line-height: 1.7; }
+.novel-rights p { margin-bottom: 0; }
+.novel-rights a { text-decoration: underline; }
+.reader-body blockquote { margin: 1.25em 0; border-inline-start: 3px solid var(--line); padding-inline-start: .8em; }
+.reader-body hr { margin: 1.8em auto; width: 4em; border: 0; border-top: 1px solid var(--accent); }

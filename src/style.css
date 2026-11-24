@@ -19,3 +19,4 @@
 .site-footer a:hover{text-decoration:underline}
 .update-list{max-width:70ch;list-style:none}
 .update-list p:last-child{line-height:1.8;margin-bottom:0}
+@media(max-width:700px){.header nav{flex-wrap:wrap;row-gap:0}}

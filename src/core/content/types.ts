@@ -53,3 +53,9 @@ export interface Manifest {
   counts: { levels: Record<string, number>; topics: Record<string, number> };
 }
 
+
+export type ReadingLayout = {
+  blockquote: number[];
+  breaks_after: number[];
+  emphasis: { sentence_id: string; start: number; end: number; tag: 'em' | 'strong' }[];
+};

@@ -5,6 +5,22 @@ const prefix = 'englishreading:' + scope + ':';
 const shellName = prefix + 'shell:' + VERSION;
 const articlePrefix = prefix + 'articles:';
 const articleName = articlePrefix + VERSION;
+const novelPrefix = prefix + 'novels:';
+const extensionPath = /^content\/extensions\/(novels\/(?:work\/nw|chapter\/nc)|grammar\/(?:exercise\/ge|passage\/gp|key\/gk))-[a-z0-9][a-z0-9-]{1,74}\.[1-9]\d*\.json$/;
+const extensionCatalogs = new Map();
+const extensionRoot = section => 'content/extensions/'+section+'/';
+function getExtensionCatalog(section) {
+  const root = extensionRoot(section);
+  if (!extensionCatalogs.has(section)) {
+    extensionCatalogs.set(section, shellFile(root+'manifest.json').then(response=>response.json()).then(manifest=>{
+      if (manifest.schema_version!==1 || manifest.section!==section || !Array.isArray(manifest.entries)) {
+        throw new Error('Unsupported extension catalog: '+section);
+      }
+      return new Map(manifest.entries.map(entry=>[root+entry.path,entry]));
+    }).catch(error=>{extensionCatalogs.delete(section);throw error;}));
+  }
+  return extensionCatalogs.get(section);
+}
 const limit = 30;
 const maxBytes = 2 * 1024 * 1024;
 const articlePath = /^content\/articles\/[a-z0-9][a-z0-9-]{2,79}\.[1-9]\d*\.json$/;
@@ -52,7 +68,12 @@ self.addEventListener('install', event => {
         if (!(await verifiedSize(response, hash))) throw new Error('Release asset is unavailable: ' + path);
         await cache.put(absolute(path), response);
       }
-      await migrateArticles();
+      const entries = new Map(await getCatalog());
+      for (const section of ['novels','grammar']) {
+        if (!Object.hasOwn(SHELL,extensionRoot(section)+'manifest.json')) continue;
+        for (const [path, entry] of await getExtensionCatalog(section)) entries.set(path,entry);
+      }
+      await migrateDocuments(entries);
     } catch (error) {
       await Promise.all([caches.delete(shellName), caches.delete(articleName)]);
       throw error;
@@ -61,11 +82,10 @@ self.addEventListener('install', event => {
   })());
 });
 
-async function migrateArticles() {
-  const entries = await getCatalog();
+async function migrateDocuments(entries) {
   const next = await caches.open(articleName);
   for (const name of await caches.keys()) {
-    if (!name.startsWith(articlePrefix) || name === articleName) continue;
+    if ((!name.startsWith(articlePrefix) && !name.startsWith(novelPrefix)) || name===articleName) continue;
     const previous = await caches.open(name);
     for (const request of await previous.keys()) {
       if ((await next.keys()).length >= limit) return;
@@ -109,8 +129,8 @@ function failure(status, reason) {
   return new Response(reason, {status, headers: {'X-Reading-Cache': reason}});
 }
 
-async function article(path) {
-  const entry = (await getCatalog()).get(path);
+async function documentFile(path, entries) {
+  const entry = entries.get(path);
   if (!entry) return failure(404, 'withdrawn');
   const key = absolute(path);
   const cache = await caches.open(articleName);
@@ -150,7 +170,25 @@ self.addEventListener('fetch', event => {
     event.respondWith(shellFile('index.html').catch(() => new Response(
       '离线应用不可用。请联网打开 EnglishReading 后再试。', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}})));
   } else if (Object.hasOwn(SHELL, path)) event.respondWith(shellFile(path));
-  else if (articlePath.test(path)) event.respondWith(article(path));
+  else if (articlePath.test(path)) event.respondWith(getCatalog().then(entries=>documentFile(path,entries)));
+  else if (extensionPath.test(path)) {
+    const section = path.split('/')[2];
+    const root = extensionRoot(section);
+    if (!Object.hasOwn(SHELL,root+'manifest.json')) return;
+    const catalogue = getExtensionCatalog(section);
+    const document = catalogue.then(entries=>documentFile(path,entries));
+    if (path.startsWith(root+'exercise/') && !request.headers.has('X-Reading-Catalogue')) {
+      // The client still requests the key only when grading. Warm its verified offline copy on a practice visit.
+      event.waitUntil(document.then(async response=>{
+        if (!response.ok) return;
+        const {key_ref} = await response.clone().json();
+        const entries = await catalogue;
+        const keyPath = root+key_ref.path;
+        if (entries.get(keyPath)?.sha256===key_ref.sha256) await documentFile(keyPath,entries);
+      }));
+    }
+    event.respondWith(document);
+  }
 });
 
 self.addEventListener('message', event => {
@@ -161,7 +199,9 @@ self.addEventListener('message', event => {
     const cache = await caches.open(articleName);
     const entries = await getCatalog();
     if (action === 'remove' && entries.has(path)) await cache.delete(absolute(path));
-    if (action === 'clear') for (const request of await cache.keys()) await cache.delete(request);
+    if (action === 'clear') for (const request of await cache.keys()) {
+      if (articlePath.test(request.url.slice(scope.length))) await cache.delete(request);
+    }
     if (action !== 'list') await notifyCacheChange();
     const saved = [];
     for (const request of await cache.keys()) {

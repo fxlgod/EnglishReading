@@ -8,6 +8,7 @@ import { words } from '../../src/core/content/words.ts';
 import { loadSources, sourceAttribution } from './sources.mjs';
 import { compilerInputs, jsonFiles, readCatalog, verifyCommitFiles } from './catalog.mjs';
 import { loadSerialPlans, validateSerialRecord } from './serial.mjs';
+import { project } from './extensions.mjs';
 
 const json = value => JSON.stringify(value) + '\n';
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -171,6 +172,9 @@ if (process.argv[1] && import.meta.filename === resolve(process.argv[1])) {
   const sources = mode === 'release' ? await loadSources() : new Map();
   const total = await compile({ mode, ...inputs, seriesFiles, sources, serialRoot:process.cwd(), reviews: resolve('content/rights'),
     output: action === 'build' ? resolve(mode === 'fixture' ? '.cache/content-fixture' : 'dist/content') : undefined });
+  if (action === 'build' && mode === 'release') {
+    await project(resolve('content/extensions-private'),'release',resolve('dist/content/extensions'));
+  }
   console.log(`${mode} ${action}: ${total} article(s)`);
 }
 
